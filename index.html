@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="clock-wrapper">
+            <div class="timer">00:00</div>
+            <div class="interval-name"></div>
+            <div class="button-wrapper">
+                <button id="start" disabled>start</button>
+                <button id="pause" disabled>pause</button>
+                <button id="stop" disabled>stop</button>
+            </div>
+        </div>
+        <!-- form az adatok beviteléhez -->
+        <form id="set-intervals" action="">
+            <input class="set-interval-name" type="text" name="name" placeholder="Interval name"> <br>
+            <input class="set-interval-time" type="number" min="0" max="90" name="min" placeholder="min">
+            <input class="set-interval-time" type="number" min="0" max="1000" name="sec" placeholder="sec"> <br>
+            <button id="set" type="submit">set</button>
+        </form>
+        <!-- ide rajzolódnak a submittelt intervalok -->
+        <div id="intervals"></div>
+        
+    </div>
+
+</body>
+<script src="app.js"></script>
+</html>

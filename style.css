@@ -1,0 +1,120 @@
+* {box-sizing: border-box; padding: 0; margin: 0;}
+
+
+.wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 12vh;
+    gap: 0.5em;
+    padding: 1em;
+}
+
+/* CLOCK */
+.clock-wrapper {
+    width: 100%;
+    background-color: #ddd;
+    grid-area: 1/1/6/5;
+    height: 70vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(12, 1fr);    
+    gap: 0.5rem;
+}
+
+.timer {
+    color: #fff;
+    font: 2rem;
+    background-color: black;
+    grid-area: 1/1/9/2;
+}
+
+.interval-name {
+    background-color: #666;
+    text-align: center;
+    grid-area: 9/1/10/2;
+
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    grid-area: 10/1/12/2;
+}
+/* INTERVALS */
+#intervals {
+    padding-bottom: 1em;
+    grid-column: 1/5;
+    background-color: #222;
+    font-size: 1rem;
+    height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5em;
+    align-items: center;
+}
+.interval {
+    background-color: #cccccc;
+    display: flex;
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 0.5em 0;
+    transform: translateY(0%);
+    transition: 0.3s;
+    height: 60px;
+}
+
+
+.interval .name {
+    flex: 1;
+}
+
+.interval .time {
+    width: 20%;
+}
+.interval button {
+    width: 12%;
+    height: 100%;
+}
+/* INTERVAL INPUT FORM */
+#set-intervals {
+    grid-area: 6/1/7/5;
+    max-width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#set-intervals *{
+    font-size: 1rem;
+    margin: 0.25rem;
+}
+.set-interval-name {
+    width: fit-content;
+    flex:1;
+}
+.set-interval-time {
+    width: 15%;
+}
+#set-intervals button {
+    width: 25%;
+}
+
+
+
+/* drag test */
+.dragged-over {
+    margin-top: 50px;
+}
+
+.dragged-over-last {
+    margin-bottom: 50px;
+}
+
+
+.hide {
+    display: none;
+}
