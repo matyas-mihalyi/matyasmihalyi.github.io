@@ -82,17 +82,25 @@
 }
 
 
-.interval .name {
+.interval .name, .edited-interval-name {
     flex: 1;
 }
 
-.interval .time {
+.interval .time{
     width: 20%;
+}
+.edited-interval-time {
+    width: 12%;
 }
 .interval button {
     width: 12%;
     height: 100%;
 }
+
+.interval #edit-ok, .interval .edit-cancel {
+    width: 10%;
+}
+
 /* INTERVAL INPUT FORM */
 #set-intervals {
     grid-area: 6/1/7/5;
