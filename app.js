@@ -107,14 +107,10 @@ function formatTimeLeft(time) {
 function editInterval(i) {
     [...intervalElement].forEach((element) => element.setAttribute("draggable", false)); 
     intervalElement[i].innerHTML = `
-    <div class="move">
-        <div class="line1"></div>
-        <div class="line2"></div>
-    </div>
     <form id="edit-form" action="">
-        <input type="text" name="name" value="${intervals[i].name}">
-        <input type="number" min="0" max="90" name="min" value="${Math.floor(intervals[i].timeSet/60)}"> : 
-        <input type="number" min="0" max="1000" name="sec" value="${intervals[i].timeSet % 60}"> 
+        <input type="text" name="name" class="edited-interval-name" value="${intervals[i].name}">
+        <input type="number" min="0" max="90" name="min" class="edited-interval-time" value="${Math.floor(intervals[i].timeSet/60)}"> : 
+        <input type="number" min="0" max="1000" name="sec" class="edited-interval-time" value="${intervals[i].timeSet % 60}"> 
     <button type="submit" id="edit-ok">Ok</button>
     <button class="edit-cancel">cancel</button>
     </form>`;
