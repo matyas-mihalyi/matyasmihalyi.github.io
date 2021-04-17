@@ -6,6 +6,7 @@ const pauseButton = document.getElementById("pause");
 const stopButton = document.getElementById("stop");
 const intervalForm = document.getElementById("set-intervals");
 const setButton = document.getElementById("set");
+const intervalTimeInputs = intervalForm.getElementsByClassName("set-interval-time")
 let deleteButton; 
 let editButton;
 let editOkButton;
@@ -71,19 +72,18 @@ function renderIntervals () {
 
 intervalForm.onsubmit = (e) => {
     e.preventDefault();
-    
-    let timeSum = parseInt(e.target.min.value*60) + parseInt(e.target.sec.value !== "" ? e.target.sec.value : 0);
-    //hozzádja a nevet és az időt 
-    e.target.name.value === "" ?
-        intervals.push(new CreateTimer(`Interval ${intervals.length + 1}`, timeSum))
-        :
-        intervals.push(new CreateTimer(e.target.name.value, timeSum));
-    //hozzáadja az interval objectet
-    // intervals.push(new CreateTimer(e.target.name.value, timeSum));
-    //kirendereli az új és az eddigi intervalokat
-    renderIntervals();
-    
-    console.log(timeSum)
+    if (e.target.min.value === "" && e.target.sec.value ==="") {
+        alert("You must set up a time")
+    } else {
+        let timeSum = parseInt(e.target.min.value*60) + parseInt(e.target.sec.value !== "" ? e.target.sec.value : 0);
+        //hozzádja a nevet és az időt 
+        e.target.name.value === "" ?
+            intervals.push(new CreateTimer(`Interval ${intervals.length + 1}`, timeSum))
+            :
+            intervals.push(new CreateTimer(e.target.name.value, timeSum));
+        //kirendereli az új és az eddigi intervalokat
+        renderIntervals();
+    }
 }
 
 
@@ -129,9 +129,10 @@ function editInterval(i) {
         let timeSum = parseInt(e.target.min.value*60) + parseInt(e.target.sec.value);
         //hozzádja a nevet és az időt
         e.target.name.value === "" ?
-        intervals.push(new CreateTimer(`Interval ${intervals.length + 1}`, timeSum))
+        intervals.splice(i, 1, (new CreateTimer(`Interval ${intervals.length + 1}`, timeSum)))
         :
-        intervals.push(new CreateTimer(e.target.name.value, timeSum));
+        intervals.splice(i, 1, (new CreateTimer(e.target.name.value, timeSum)));
+        
         //kirendereli az új és az eddigi intervalokat
         renderIntervals();
     }
@@ -150,14 +151,12 @@ function copyInterval (i) {
 //RESIZE #INTERVALS INTERVAL CONTAINER
 function resizeIntervalContainer () {
     intervalContainer.style.height = `${(intervalElement[0].offsetHeight+16) * (intervalElement.length)}px`
-    console.log(intervalContainer.style.height);
 }
 
 //////////////////////////////////
 //////////////BUTTONS/////////////
 //////////////////////////////////
 
-//állítsd be h ha nincs bent interval ne jelenjen meg a start sem
 
 //START BUTTON
 startButton.onclick = () => {
@@ -282,74 +281,74 @@ function dragFunction() {
             setTimeout(() => {item.classList.add("hide");},0); //draggelt elementet elrejtjük display none-nal
             //ezzel 'kiszedjuk' a draggelt elementet indexét, amivel később visszahívjuk
             e.dataTransfer.setData('text/plain', dragItemArray.indexOf(e.target));
-
             intervalDragged = intervals[dragItemArray.indexOf(e.target)];
-
-            intervals.splice(dragItemArray.indexOf(e.target),1);
-            //a dragItemArrayből is kiszedjük, hogy visszaillesztsénél passzoljanak az indexek
-            dragItemArray.splice(dragItemArray.indexOf(e.target),1); 
-           
         }
         
         ));
         
-        
-        intervalContainer.addEventListener('dragenter', dragEnter);
-        intervalContainer.addEventListener('dragover', dragOver);
-        // intervalContainer.addEventListener('dragleave', dragLeave);
-        
-        function dragEnter (e) {
-            e.preventDefault();
-        }
-        
-        function dragOver (e) {
-            e.preventDefault();
-            //kiszedjük az elementet, amelyik középvonala fölött vagyunk a draggelt elementtel
-            let previousItem = getDragAfterElement(e.clientY);
-            let previousItemIndex = dragItemArray.indexOf(previousItem);
-            
-            //az épp draggelt element alatti elementre rárak egy margin-top classt h lejebb menjen
-            if (previousItem !== undefined) {
-                previousItem.classList.add("dragged-over");
-                for (let i = previousItemIndex + 1; i < dragItemArray.length; i++) {
-                    dragItemArray[i].classList.remove("dragged-over");
-                } 
-                for (let i = 0; i < previousItemIndex; i++) {
-                    dragItemArray[i].classList.remove("dragged-over");
-                }
-                
-            }
-            //ha az utolsó element alá draggeljük az elementet margin-bottomot kap
-            if ((e.clientY - dragItemArray[dragItemArray.length-1].offsetHeight/2) > dragItemArray[dragItemArray.length-1].getBoundingClientRect().top) {
-                dragItemArray[dragItemArray.length -1].classList.add("dragged-over-last");
-                dragItemArray.forEach((item) => item.classList.remove("dragged-over"));
-            } else {
-                dragItemArray[dragItemArray.length -1].classList.remove("dragged-over-last");
-            }
-        }
-        
-        
-        intervalContainer.ondrop = (e) => {
-            e.preventDefault();
-            
-            //kiszedjük a beküldött adatot, azaz a draggelt element indexét, és így megkapjuk magát az elementet is
-            let draggedItemIndex = e.dataTransfer.getData('text/plain'); 
-            let draggedItem = intervalElement[draggedItemIndex];
-            //kiszedjük az elementet, amelyik középvonala fölött vagyunk droppoláskor
-            let previousItem = getDragAfterElement(e.clientY);
-            let previousItemIndex = dragItemArray.indexOf(previousItem);
-            //
-            if (previousItemIndex >= 0) {
-                intervals.splice(previousItemIndex, 0, intervalDragged);
-            } else  {
-                intervals.push(intervalDragged);
-            }
-            //
-                        
-            draggedItem.classList.remove("hide");
-            
-            
+    intervalElement.forEach((item) => 
+    item.addEventListener(("dragend"), (e)=> {
+        e.preventDefault();
+        e.target.classList.remove("hide");
         renderIntervals();
+    } 
+    ));
+        
+    intervalContainer.addEventListener('dragenter', dragEnter);
+    intervalContainer.addEventListener('dragover', dragOver);
+    // intervalContainer.addEventListener('dragleave', dragLeave);
+    
+    function dragEnter (e) {
+        e.preventDefault();
+    }
+    
+    function dragOver (e) {
+        e.preventDefault();
+        //kiszedjük az elementet, amelyik középvonala fölött vagyunk a draggelt elementtel
+        let previousItem = getDragAfterElement(e.clientY);
+        let previousItemIndex = dragItemArray.indexOf(previousItem);
+        
+        //az épp draggelt element alatti elementre rárak egy margin-top classt h lejebb menjen
+        if (previousItem !== undefined) {
+            previousItem.classList.add("dragged-over");
+            for (let i = previousItemIndex + 1; i < dragItemArray.length; i++) {
+                dragItemArray[i].classList.remove("dragged-over");
+            } 
+            for (let i = 0; i < previousItemIndex; i++) {
+                dragItemArray[i].classList.remove("dragged-over");
+            }
+            
+        }
+        //ha az utolsó element alá draggeljük az elementet margin-bottomot kap
+        if ((e.clientY - dragItemArray[dragItemArray.length-1].offsetHeight/2) > dragItemArray[dragItemArray.length-1].getBoundingClientRect().top) {
+            dragItemArray[dragItemArray.length -1].classList.add("dragged-over-last");
+            dragItemArray.forEach((item) => item.classList.remove("dragged-over"));
+        } else {
+            dragItemArray[dragItemArray.length -1].classList.remove("dragged-over-last");
+        }
+    }
+    
+    
+    intervalContainer.ondrop = (e) => {
+        e.preventDefault();
+        //kiszedjük a beküldött adatot, azaz a draggelt element indexét, és így megkapjuk magát az elementet is
+        let draggedItemIndex = e.dataTransfer.getData('text/plain'); 
+        //kiszedjük az arrayből
+        intervals.splice(draggedItemIndex,1);
+        //a dragItemArrayből is kiszedjük, hogy visszaillesztsénél passzoljanak az indexek
+        dragItemArray.splice(draggedItemIndex,1);
+        
+        //kiszedjük az elementet, amelyik középvonala fölött vagyunk droppoláskor
+        let previousItem = getDragAfterElement(e.clientY);
+        let previousItemIndex = dragItemArray.indexOf(previousItem);
+        //beillesztyük a megfelelő helyre
+        if (previousItemIndex >= 0) {
+            intervals.splice(previousItemIndex, 0, intervalDragged);
+        } else  {
+            intervals.push(intervalDragged);
+        }
+    //újra rendereljük az intervalokat
+    renderIntervals();
     }
     // kiszedi az elementet ami elé bekerül a draggelt element
     function getDragAfterElement(y) {
@@ -369,11 +368,11 @@ function dragFunction() {
 
 
 
-//a format time órára is formatoljon
+//a format time órára is formatoljon ?
 
-//ha új interval indul ne az előző 0:00-ját írja ki
+//ha új interval indul ne az előző 0:00-ját írja ki, 0.5s
 
-//tudjon értesítést küldeni
+//tudjon hangot lejátszani értesítést küldeni
 
 //add to homescreen
 
@@ -381,4 +380,4 @@ function dragFunction() {
 
 //lehessen menteni, nevet adni neki
 
-//ne lehessen üres idővel intervalt settelni
+//ne lehessen üres idővel intervalt beállítani
