@@ -1,46 +1,125 @@
 * {box-sizing: border-box; padding: 0; margin: 0; font-family: var(--font);}
 
 :root {
-    --font: "Source Sans Pro", Helvetica;
+    --font: "Roboto", Helvetica;
 }
 
-
+body {
+    overflow-x: hidden;
+}
 
 .wrapper {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 12vh;
+    grid-auto-rows: 80px;
     gap: 0.5em;
+    background-color: #000;
     padding: 1em;
 }
 
+/********************/
+/* NAV MENU WRAPPER */
+/********************/
+
+/* BURGER */
+.nav-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #111;
+}
+.nav-wrapper .burger{
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    display: flex;
+    height: 30px;
+    width: 30px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.nav-wrapper .burger div{
+    width: 25px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    transform-origin: 0%;
+    transition: 0.3s;
+}
+
+.nav-wrapper .burger .line2{
+    margin: 6.5px 0;
+}
+
+.burger-active .line1{
+    transform: rotate(45deg);
+}
+.burger-active .line2{
+    opacity: 0;
+}
+.burger-active .line3{
+    transform: rotate(-45deg);
+}
+/* NAV ELEMENTS */
+.nav-wrapper .navlink-wrapper{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 3em 3em 2em 3em;
+    background-color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    transform: translateX(100%);
+    transition: 0.3s;
+}
+
+.navlink-wrapper li{
+    margin: 16px 0;
+    color: #fff;
+}
+
+.nav-active {
+    transform: translate(0%) !important;
+}
+
+/*********/
 /* CLOCK */
+/*********/
+
 .clock-wrapper {
     width: 100%;
-    background-color: #ddd;
-    grid-area: 1/1/6/5;
+    grid-area: 1/1/5/5;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(12, 1fr);    
+    grid-template-rows: repeat(10, 1fr);    
     gap: 0.5rem;
 }
 
 .timer-wrapper {
     color: #fff;
-    font: 2rem;
-    background-color: black;
-    grid-area: 1/1/9/2;
+    grid-area: 1/1/8/2;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.timer-wrapper .timer {
+    font-family: "Roboto Mono", Courier, monospace;
+
     font-size: 4rem;
 }
 
+
 .interval-name {
-    background-color: #666;
+    color: #fff;
     text-align: center;
-    grid-area: 9/1/11/2;
+    grid-area: 8/1/10/2;
     font-size: 2.5rem;
 }
 
@@ -49,13 +128,137 @@
     justify-content: center;
     align-items: center;
     padding: 0.5rem;
-    grid-area: 11/1/13/2;
+    grid-area: 10/1/11/2;
 }
 
-.button-wrapper *{
+.button-wrapper button{
     margin: 1.5em;
     height: 100%;
     width: 70px;
+}
+.button-wrapper button svg{
+    width: 100%;
+    height: 100%;
+}
+
+/* INTERVAL INPUT FORM */
+
+#set-intervals {
+    grid-area: 5/1/6/5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    background-color: #222;
+}
+
+#set-intervals *{
+    font-size: 1rem;
+    margin: 0.25rem;
+}
+.set-interval-name {
+    width: fit-content;
+    flex:1;
+}
+.set-interval-time {
+    width: 15%;
+}
+#set-intervals #set {
+    width: 25%;
+}
+
+
+/*************/
+/*************/
+/* **MODAL** */
+/*************/
+/*************/
+
+
+
+.modal {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 32px;
+    visibility: hidden;
+    z-index: 150;
+}
+.modal-open {
+    visibility: visible;
+}
+
+.modal form{
+    width: 100%;
+    background-color: #666;
+    padding: 16px;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+}
+
+.form-open {
+    display: flex !important;
+}
+
+.modal form div {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+}
+.modal form button{
+    padding: 16px 32px;
+    max-width: 150px;
+}
+/************/
+/* SETTINGS */
+/************/
+#settings-form {
+    display: none;
+}
+
+/* REPEAT */
+/* SOUND EFFECT */
+/* COLOUR THEME */
+
+/************/
+/* **SAVE** */
+/************/
+#save-form div{
+    flex-direction: column;
+    width: 100%;
+}
+#save-form div input,label{
+    padding: 8px;
+}
+#save-form div input{
+    width: 100%;
+}
+
+/************/
+/* **LOAD** */
+/************/
+.saved-interval-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+.saved-interval-container .saved-interval-element{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 /* INTERVALS */
 #intervals {
@@ -101,33 +304,8 @@
     width: 10%;
 }
 
-/* INTERVAL INPUT FORM */
-#set-intervals {
-    grid-area: 6/1/7/5;
-    max-width: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
 
-#set-intervals *{
-    font-size: 1rem;
-    margin: 0.25rem;
-}
-.set-interval-name {
-    width: fit-content;
-    flex:1;
-}
-.set-interval-time {
-    width: 15%;
-}
-#set-intervals button {
-    width: 25%;
-}
-
-
-
-/* drag test */
+/* DRAG STATES */
 .dragged-over {
     margin-top: 50px;
 }
@@ -135,7 +313,6 @@
 .dragged-over-last {
     margin-bottom: 50px;
 }
-
 
 .hide {
     display: none;
