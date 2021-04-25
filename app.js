@@ -1,12 +1,23 @@
 //DOM ELEMENTS
+//
+//CLOCK + BUTTONS
 const clock = document.querySelector(".timer");
-const intervalNameDisplay = document.querySelector(".interval-name")
+const intervalNameDisplay = document.querySelector(".interval-name");
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
 const stopButton = document.getElementById("stop");
+
+//INTERVAL SUBMIT FORM
 const intervalForm = document.getElementById("set-intervals");
+const intervalInputs = intervalForm.querySelectorAll("input");
 const setButton = document.getElementById("set");
-const intervalTimeInputs = intervalForm.getElementsByClassName("set-interval-time")
+const repeatCheckBox = document.getElementById("repeat");
+const intervalTimeInputs = intervalForm.getElementsByClassName("set-interval-time");
+
+
+let sound1 = new Audio("glass_ping.wav");
+
+//INTERVALS
 let deleteButton; 
 let editButton;
 let editOkButton;
@@ -22,7 +33,7 @@ let dragItemArray; //array-t kell csinálni a draggelhető itemek nodeListjébő
 
 function renderIntervals () {
     let formHTML = "";
-
+    
     for (let item of intervals)
     formHTML += `
     <div class="interval" draggable="true">
@@ -33,43 +44,50 @@ function renderIntervals () {
         <button class="copy">copy</button>
     </div>`;
     intervalContainer.innerHTML = formHTML;
-    intervalNameDisplay.innerHTML = `${intervals[0].name}`
-    //DELETE, EDIT & COPY BUTTONS
-    deleteButton = document.querySelectorAll(".delete");
-    editButton = document.querySelectorAll(".edit");
-    copyButton = document.querySelectorAll(".copy");
-    
-    for (let i = 0; i < intervals.length; i++) {
-        deleteButton[i].onclick = () => {    
-            intervals.splice(i, 1);
-            renderIntervals();
-        }
-        editButton[i].onclick = () => editInterval(i);
-        copyButton[i].onclick = () => copyInterval(i);
+    if (intervals.length === 0) {
+        clock.innerHTML = "00:00";
+        intervalNameDisplay.innerHTML = "";
+
+        startButton.disabled = true;
+        stopButton.disabled = true;
+    } else {
+        clock.innerHTML = formatTimeLeft(intervals[0].timeLeft);
+        intervalNameDisplay.innerHTML = `${intervals[0].name}`
     }
-    
-    
-    //enable start & stop buttons if there are intervals
-    if (intervals !== "") {
-        startButton.disabled = false;
-        stopButton.disabled = false;
-    }
-    //disable submit if intervals are running
-    
+    //CLEAR INTERVAL FORM INPUTS
+    [...intervalInputs].forEach((input) => input.value="")
     //drag function and variables
     intervalElement = document.querySelectorAll(".interval");
     dragItemArray =  Array.from(intervalElement);
     dragFunction();
+ 
     
-    clock.innerHTML = formatTimeLeft(intervals[0].timeLeft);
-
-    //resive #intervals container
-    resizeIntervalContainer();
-
+    //check if there are intervals
+    if (intervals.length !== 0) {
+        //DELETE, EDIT & COPY BUTTONS
+        deleteButton = document.querySelectorAll(".delete");
+        editButton = document.querySelectorAll(".edit");
+        copyButton = document.querySelectorAll(".copy");
+        
+        for (let i = 0; i < intervals.length; i++) {
+            deleteButton[i].onclick = () => {    
+                intervals.splice(i, 1);
+                renderIntervals();
+            }
+            editButton[i].onclick = () => editInterval(i);
+            copyButton[i].onclick = () => copyInterval(i);
+        }
+        //adjust container size
+        resizeIntervalContainer();
+    }
+    //enable start & stop buttons if there are intervals
+    startButton.disabled = false;
+    stopButton.disabled = false;
+    setButton.disabled = false;
 }
 
 
-
+//SUBMIT EVENT
 intervalForm.onsubmit = (e) => {
     e.preventDefault();
     if (e.target.min.value === "" && e.target.sec.value ==="") {
@@ -149,9 +167,9 @@ function resizeIntervalContainer () {
     intervalContainer.style.height = `${(intervalElement[0].offsetHeight+16) * (intervalElement.length)}px`
 }
 
-//////////////////////////////////
-//////////////BUTTONS/////////////
-//////////////////////////////////
+///////////////////////////////////
+//////////////BUTTONS//////////////
+///////////////////////////////////
 
 
 //START BUTTON
@@ -201,9 +219,10 @@ stopButton.onclick = () => {
 
 //////////////////////////////////
 ///////INTERVAL CONSTRUCTOR///////
+///////////////&//////////////////
+/////////TIME MEASUREMENT/////////
 //////////////////////////////////
-
-
+                            
 CreateTimer.prototype = {
     timerInterval : null,
 }
@@ -214,21 +233,57 @@ CreateTimer.prototype.start_timer = function startTimer(){
         this.isRunning = true;
         this.timePassed = this.timePassed += 1;
         this.timeLeft = this.timeSet-this.timePassed;
+        //render remaining time & interval name
         clock.innerHTML = formatTimeLeft(this.timeLeft);
         intervalNameDisplay.innerHTML = this.name;
-        
-        //if countdown reacehs zero
-        if (this.timeLeft === 0) {
-            //set everything to base 
+        //stop sound
+        // sound1.pause();
+        // sound1.currentTime = 0;
+        //if countdown reaches zero start next interval or finish if it was the last one
+        //REPEAT UNCHECKED
+        if (this.timeLeft === 0 && !repeatCheckBox.checked) {
+            //set current interval to base 
             clearInterval(this.timerInterval);
             this.timePassed = 0;
             this.isRunning = false;
             this.isExpired = true;
-            //start next timer
-            let i = intervals.indexOf(this); //get curent timer object's index            
-            if (intervals[i + 1].isExpired === false) {      //only start next timer if current isn't the last      
-                intervals[i + 1].start_timer(); //start the next timer
-            }
+
+            //to start next interval, get current one's index
+            let i = intervals.indexOf(this);             
+             
+            //play alarm sound
+            sound1.play();
+
+            //if current interval was the last one, every element of intervals[] is set to base with stop_timer() function
+            if (intervals.length === i+1) {
+                intervals.forEach((item)=> item.stop_timer());
+                renderIntervals();
+            //if there are still intervals left, start the next one
+            } else if (intervals[i + 1].isExpired === false) {  
+                intervals[i + 1].start_timer();
+                
+            } 
+        //REPEAT CHECKED
+        } else if (this.timeLeft === 0 && repeatCheckBox.checked) {
+            //set current interval to base 
+            clearInterval(this.timerInterval);
+            this.timePassed = 0;
+            this.isRunning = false;
+            this.isExpired = true;
+            //to start next interval, get current one's index
+            let i = intervals.indexOf(this);
+             
+            //play alarm sound
+            sound1.play();
+
+            //if it was the last, set isExpired false to all, and start first timer
+            if (intervals.length === i+1) {
+                intervals.forEach((interval) => interval.isExpired = false);
+                intervals[0].start_timer();
+             //if there are still intervals left, start the next one
+            } else if (intervals[i + 1].isExpired === false) {  
+                intervals[i + 1].start_timer();
+            }  
         }
     }, 1000);
     
@@ -258,9 +313,11 @@ function CreateTimer(name, num) {
     this.isExpired = false
 }
 
-
 //ARRAY STORING THE INTERVALS
 let intervals = [];
+
+
+
 
 //////////////////////////
 ///////DRAG & DROP////////
@@ -356,24 +413,158 @@ function dragFunction() {
           } else {
             return closest;
           }
-        }, { offset: Number.NEGATIVE_INFINITY }).element
+        }, {offset: Number.NEGATIVE_INFINITY }).element
     }
 }
 
+//////////////////////////////////
+//////////////////////////////////
+////////////SAVE & LOAD///////////
+//////////////////////////////////
+//////////////////////////////////
+const modal = document.querySelector(".modal");
+
+
+//////////////////////////////////
+/////////////OPEN MENU////////////
+//////////////////////////////////
+const burger = document.querySelector(".burger");
+const navlinks = document.querySelector(".navlink-wrapper");
+
+burger.onclick = () => {burger.classList.toggle("burger-active"); navlinks.classList.toggle("nav-active");}
 
 
 
+//////////////////////////////////
+///////////SAVE FUNCTION//////////
+//////////////////////////////////
+const saveModalButton = document.getElementById("save-button");
+const saveForm = document.getElementById("save-form");
+const cancelSaveForm = document.getElementById("cancel-save")
+let savedIntervals = {}; //intervals will be saved here
+let storedIntervals;
 
-//a format time órára is formatoljon ?
+//On cancel, close modal & do nothing
+cancelSaveForm.onclick = () => {modal.classList.remove("modal-open"); saveForm.classList.remove("form-open");}
 
-//ha új interval indul ne az előző 0:00-ját írja ki, 0.5s
+//Clicking save brings up the modal & save-form, closes nav
+saveModalButton.onclick = () => {
+    modal.classList.add("modal-open");
+    saveForm.classList.add("form-open");
+    burger.classList.remove("burger-active"); 
+    navlinks.classList.remove("nav-active");
+}
 
-//tudjon hangot lejátszani értesítést küldeni
+//on submitting save form
+saveForm.onsubmit = (e) => {
+    e.preventDefault();
+
+    //add saved interval as property and key to savedIntervals object
+    savedIntervals[`${e.target.nameOfInterval.value}`] = intervals.slice(0);
+    
+    //save savedIntervals to local storage
+    localStorage.setItem("savedIntervals", JSON.stringify(savedIntervals));
+    
+    //update variable containing savedIntervals
+    let extractedIntervals = localStorage.getItem("savedIntervals");
+   
+    storedIntervals = JSON.parse(extractedIntervals);
+    console.log(storedIntervals);
+    //close modal & form
+    modal.classList.remove("modal-open"); saveForm.classList.remove("form-open"); 
+
+}
+
+//////////////////////////////////
+///////////////LOAD///////////////
+//////////////////////////////////
+const loadModalButton = document.getElementById("load-button");
+const loadForm = document.getElementById("load-form");
+const cancelLoadForm = document.getElementById("cancel-load");
+const savedIntervalContainer = document.querySelector(".saved-interval-container");
+
+//Clicking load brings up the modal & save-form, closes nav
+loadModalButton.onclick = () => {
+    modal.classList.add("modal-open");
+    loadForm.classList.add("form-open");
+    burger.classList.remove("burger-active"); 
+    navlinks.classList.remove("nav-active");
+    renderSavedIntervals();
+}
+
+//cancel load form
+cancelLoadForm.onclick = () => {modal.classList.remove("modal-open"); loadForm.classList.remove("form-open");}
+
+//render saved intervals
+function renderSavedIntervals () {
+    
+    //set innerHTML for container
+    let loadFormHTML = "";
+    for (let [key, value] of Object.entries(storedIntervals))
+    loadFormHTML += `
+    <label class="saved-interval-element">
+    ${key}
+    <input type="radio" id="${key}" name="saveditem" value="${key}">
+    </label>
+    `;
+    savedIntervalContainer.innerHTML = loadFormHTML;
+    
+    
+}
+
+//load intervals on click
+loadForm.onsubmit = (e) => {
+    e.preventDefault();
+    
+    //the selected input is the property of the saved interval array so we store it in a variable
+    intervalToLoad = e.target.saveditem.value;
+    //assigning the selected saved item to the intervals array
+    intervals = savedIntervals[intervalToLoad];
+    
+    //refresh displayed intervals
+    renderIntervals();
+    
+    //close modal & form
+    modal.classList.remove("modal-open"); loadForm.classList.remove("form-open");
+}
+
+
+//////////////////////////////////
+/////////////SETTINGS/////////////
+//////////////////////////////////
+
+const optionsModalButton = document.getElementById("settings-button");
+const settingsForm = document.getElementById("settings-form");
+const cancelSettingsForm = document.getElementById("cancel-settings");
+
+optionsModalButton.onclick = () => {
+    //open modal & settings form
+    modal.classList.add("modal-open"); settingsForm.classList.add("form-open");
+}
+
+cancelSettingsForm.onclick = () => {modal.classList.remove("modal-open"); settingsForm.classList.remove("form-open")}
+
+
 
 //add to homescreen
 
-//utolsó timer lejártával mindent visszaállítani
-
 //lehessen menteni, nevet adni neki
 
-//ne lehessen üres idővel intervalt beállítani
+//repeat function, írja ki hányadik ismétlés
+
+//tips
+
+//SAVE 
+//dont save if intervals is empty
+
+//message if no interval to load
+
+//need to be able to delete saved intervals
+
+//after saving, clear save input text value 
+
+////////////////////////////////////////
+
+//choose sound
+
+//color themes
