@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-----HEADER----->
+    <div id="header">
+        <div id="header-img-container"><img id="header-img" src="https://live.staticflickr.com/65535/51079262216_8c08c17455_o.png" alt="company logo"></div>
+        <div class="burger">
+            <div class="line1"></div>  
+            <div class="line2"></div>  
+            <div class="line3"></div>  
+        </div>
+        <nav id="nav-bar">
+            <li><a class="nav-link" href="#landing">about</a></li>
+            <li><a class="nav-link" href="#offers">offers</a></li>
+            <li><a class="nav-link" href="#contact">contact</a></li>
+        </nav>
+    </div>
+    <!-----LANDING----->
+    <section id="landing">
+        <div class="frame1"></div>
+        <h1 class="landing-title">Rent a cat for a day!</h1>
+        <p class="landing-text">Have you ever wondered what it's like to have a cat? You will find out with Rent-A-Cat! <br> You can hire one of our top cats, to keep you company. They will introduce you to the world of these majestic animals.</p>
+        <a class="cta" href="#offers">Get started</a>
+    </section>
+    <!-----OFFERS----->
+    <section id="offers">
+        <h2 class="offers-title">Choose your plan</h2>
+        <div class="offer">
+            <div class="title-background"></div>
+            <h3 class="offer-title">Basic</h3>
+            <div class="offer-price">2$ per hour</div>
+            <div class="offer-pic"><img src="pexels-bekka-mongeau-804475.jpg" alt="cute cat at home"></div>
+            <p class="offer-text">Play with your chosen cat at one of our designated indoor locations. You can observe, groom, or play with the cat if it's willing to. A great package for beginners.</p>
+        </div>
+        <div class="offer">
+            <div class="title-background title-background2"></div>
+            <h3 class="offer-title">Advanced</h3>
+            <div class="offer-price">5$ per hour</div>
+            <div class="offer-pic offer-pic2"><img src="pexels-nishant-aneja-2361952_cropped.jpg" alt="cute cat walking outdoors"></div>
+            <p class="offer-text">Are you ready to meow it to the next level? Our advanced plan lets you test yor cat-walking skills. Or the cat's human-walking skills. You decide!</p>
+        </div>
+        <div class="offer">
+            <div class="title-background title-background3"></div>
+            <h3 class="offer-title">Unlimited Fun</h3>
+            <div class="offer-price">20$ for a day</div>
+            <div class="offer-pic offer-pic3"><img src="pexels-nastyasensei-3318214.jpg" alt="awesome cat stretching"></div>
+            <p class="offer-text">Rent a cat for an entire day! Our special agents can be deployed wherever you like: at your home, outdoors, everywhere. Be prepared for tons of fun... and fur.</p>
+        </div>
+    </section>
+    <!-----CONTACT----->
+    <section id="contact">
+        <h2 class="contact-title">Interested?</h2>
+        <p class="contact-text">Just give us your email and choose your preferred cat breed. We will contact you ASAP. You may watch <a href="#contact" class="video-modall-btn">this video</a> for some basic information about cats. </p>   
+        <form action="" id="form">
+            <label for="name">Name</label><input type="text" name="name" placeholder="Your Name" id="name"><br>
+            <label for="email">Email</label><input type="email" name="email" placeholder="your.email@address.com" id="email"><br>
+            <label for="cat-breed">Select your preferred breed</label><select id="cat-breed">
+                <option disabled selected hidden value="placeholder">Preferred breed</option>
+                <option value="Abyssinian">Abyssinian</option>
+                <option value="Aegean">Aegean</option>
+                <option value="American Bobtail">American Bobtail</option>
+                <option value="American Curl">American Curl</option>
+                <option value="American Ringtail">American Ringtail</option>
+                <option value="American Shorthair">American Shorthair</option>
+                <option value="American Wirehair">American Wirehair</option>
+                <option value="Aphrodite Giant">Aphrodite Giant</option>
+                <option value="Arabian Mau">Arabian Mau</option>
+                <option value="Asian">Asian</option>
+                <option value="Asian Semi-longhair">Asian Semi-longhair</option>
+                <option value="Australian Mist">Australian Mist</option>
+                <option value="Balinese">Balinese</option>
+                <option value="Bambino">Bambino</option>
+                <option value="Bengal">Bengal</option>
+                <option value="Birman">Birman</option>
+                <option value="Bombay">Bombay</option>
+                <option value="Brazilian Shorthair">Brazilian Shorthair</option>
+                <option value="British Longhair">British Longhair</option>
+                <option value="British Shorthair">British Shorthair</option>
+                <option value="Burmese">Burmese</option>
+                <option value="Burmilla">Burmilla</option>
+                <option value="California Spangled">California Spangled</option>
+                <option value="Chantilly-Tiffany">Chantilly-Tiffany</option>
+                <option value="Chartreux">Chartreux</option>
+                <option value="Chausie">Chausie</option>
+                <option value="Colorpoint Shorthair">Colorpoint Shorthair</option>
+                <option value="Cornish Rex">Cornish Rex</option>
+                <option value="Cymric, Manx Longhair or Long-haired Manx[b]">Cymric, Manx Longhair or Long-haired Manx[b]</option>
+                <option value="Cyprus">Cyprus</option>
+                <option value="Devon Rex">Devon Rex</option>
+                <option value="Dwelf">Dwelf</option>
+                <option value="Egyptian Mau">Egyptian Mau</option>
+                <option value="European Shorthair">European Shorthair</option>
+                <option value="Exotic Shorthair">Exotic Shorthair</option>
+                <option value="Foldex">Foldex</option>
+                <option value="German Rex">German Rex</option>
+                <option value="Havana Brown">Havana Brown</option>
+                <option value="Highlander">Highlander</option>
+                <option value="Japanese Bobtail">Japanese Bobtail</option>
+                <option value="Kanaani">Kanaani</option>
+                <option value="Khao Manee">Khao Manee</option>
+                <option value="Kinkalow">Kinkalow</option>
+                <option value="Korat">Korat</option>
+                <option value="Korean Bobtail">Korean Bobtail</option>
+                <option value="Korn Ja">Korn Ja</option>
+                <option value="Lambkin">Lambkin</option>
+                <option value="LaPerm">LaPerm</option>
+                <option value="Lykoi">Lykoi</option>
+                <option value="Maine Coon">Maine Coon</option>
+                <option value="Manx">Manx</option>
+                <option value="Mekong Bobtail">Mekong Bobtail</option>
+                <option value="Minskin">Minskin</option>
+                <option value="Napoleon">Napoleon</option>
+                <option value="Munchkin">Munchkin</option>
+                <option value="Nebelung">Nebelung</option>
+                <option value="Norwegian Forest Cat">Norwegian Forest Cat</option>
+                <option value="Ocicat">Ocicat</option>
+                <option value="Ojos Azules">Ojos Azules</option>
+                <option value="Oriental Bicolor">Oriental Bicolor</option>
+                <option value="Oriental Longhair[g]">Oriental Longhair[g]</option>
+                <option value="Oriental Shorthair[g]">Oriental Shorthair[g]</option>
+                <option value="Persian  modern ">Persian  modern </option>
+                <option value="Persian  traditional ">Persian  traditional </option>
+                <option value="Peterbald">Peterbald</option>
+                <option value="Pixie-bob">Pixie-bob</option>
+                <option value="Ragdoll">Ragdoll</option>
+                <option value="Raas">Raas</option>
+                <option value="Russian Blue">Russian Blue</option>
+                <option value="Russian White, Russian Black and Russian Tabby">Russian White, Russian Black and Russian Tabby</option>
+                <option value="Sam Sawet">Sam Sawet</option>
+                <option value="Savannah">Savannah</option>
+                <option value="Scottish Fold">Scottish Fold</option>
+                <option value="Selkirk Rex">Selkirk Rex</option>
+                <option value="Serengeti">Serengeti</option>
+                <option value="Serrade Petit">Serrade Petit</option>
+                <option value="Singapura">Singapura</option>
+                <option value="Snowshoe">Snowshoe</option>
+                <option value="Sokoke">Sokoke</option>
+                <option value="Somali">Somali</option>
+                <option value="Sphynx">Sphynx</option>
+                <option value="Suphalak">Suphalak</option>
+                <option value="Thai Lilac, Thai Blue Point and Thai Lilac Point">Thai Lilac, Thai Blue Point and Thai Lilac Point</option>
+                <option value="Tonkinese">Tonkinese</option>
+                <option value="Toyger">Toyger</option>
+                <option value="Turkish Angora">Turkish Angora</option>
+                <option value="Turkish Van">Turkish Van</option>
+                <option value="Turkish Vankedisi">Turkish Vankedisi</option>
+                <option value="Ukrainian Levkoy">Ukrainian Levkoy</option>
+                <option value="York Chocolate">York Chocolate</option>
+            </select>
+            <br>
+            <input class="cta" type="submit" value="send" action="https://www.freecodecamp.com/email-submit" id="submit">  
+        </form>
+    </section>
+    <div class="video-modall"  id="video-wrapper">
+        <iframe src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="video"></iframe>  
+        <div class="close-btnn">
+          <div class="line1"></div>
+          <div class="line2"></div>
+        </div>  
+      </div>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>

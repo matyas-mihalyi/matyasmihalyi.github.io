@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interval Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"></head>
+<body>
+    <div class="wrapper">
+<!----------------->
+<!-- nav wrapper -->
+<!----------------->
+<div class="nav-wrapper">
+    <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <ul class="navlink-wrapper">
+                <li id="save-button">Save</li>
+                <li id="load-button">Load</li>
+                <li id="settings-button">Settings</li>
+            </ul>
+        </div>
+<!------------------->
+<!------------------->
+<!-- clock section -->
+<!------------------->
+<!------------------->
+        <div class="clock-wrapper">
+            <div class="timer-wrapper">
+                <div class="timer">00:00</div>
+            </div>
+            <div class="interval-name"></div>
+            <div class="button-wrapper">
+                <button id="start" disabled><img src="play-fill.svg" alt="play"></button>
+                <button id="pause" disabled><img src="pause-fill.svg" alt="play"></button>
+                <button id="stop" disabled><img src="stop-fill.svg" alt="play"></button>
+            </div>
+        </div>
+<!-- form to set up intervals -->
+        <form id="set-intervals" action="">
+            <input class="set-interval-name" type="text" name="name" placeholder="Interval name"> <br>
+            <input class="set-interval-time" type="number" min="0" max="90" name="min" placeholder="min">
+            <input class="set-interval-time" type="number" min="0" max="1000" name="sec" placeholder="sec"> <br>          
+            <button id="set" type="submit">set</button>
+        </form>      
+<!-- intervals are rendered in this div -->
+        <div id="intervals"></div>         
+</div>
+
+
+
+<!-------------->
+<!-------------->
+<!--- modal ---->
+<!-------------->
+<!-------------->
+    <div class="modal">
+        <!-------------->
+        <!---- save ---->
+        <!-------------->
+        <form id="save-form">
+            <div>
+                <label for="save-interval-name">Name</label>
+                <input id="save-interval-name" type="text" name="nameOfInterval"required>
+            </div>
+            <button id="save-interval" type="submit">Save</button>
+            <button id="cancel-save" type="button">Cancel</button>
+        </form>
+        
+        <!-------------->
+        <!---- load ---->
+        <!-------------->
+        <form id="load-form">
+            <p>Choose interval to load</p>
+            <!-- saved intervals are rendered here -->
+            <div class="saved-interval-container"></div>
+            <!---->
+            <button id="load-interval" type="submit">Load</button>
+            <button id="cancel-load" type="button">Cancel</button>
+        </form>
+
+        <!-------------->
+        <!-- settings -->
+        <!-------------->
+        <form id="settings-form">
+            <!-- repeat -->
+            <div class="repeat-wrapper">
+                <label for="repeat">Repeat</label>
+                <input type="checkbox" id="repeat" name="repeat" value="repeat" checked>
+            </div>
+            <!-- sound effect -->
+            <div class="sound-effect-wrapper">
+                <label for="sound-effect">Sound effect</label>
+                <select name="sound-effect" id="sound-effect">
+                    <option value="glass_ping.wav">Glass</option>
+                    <option value="none" disabled>None</option>
+                </select>
+            </div>
+            <!-- colour -->
+            <div class="color-wrapper">
+                <label for="colour">Colour theme</label>
+                <select name="colour" id="colour">
+                    <option value="black">Black & White</option>
+                    <option value="red" disabled>Red</option>
+                </select>
+            </div>
+            <button id="apply-settings" type="submit" disabled>Apply</button>
+            <button id="cancel-settings" type="button">Cancel</button>
+        </form>
+    </div>
+<!-------------->
+<!-------------->
+<!--- modal ---->
+<!-----end------>
+<!-------------->
+</body>
+<script src="app.js"></script>
+</html>
+
