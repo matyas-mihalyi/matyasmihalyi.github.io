@@ -4,117 +4,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interval Timer</title>
+    <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"></head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
 <body>
-    <div class="wrapper">
-<!----------------->
-<!-- nav wrapper -->
-<!----------------->
-<div class="nav-wrapper">
-    <div class="burger">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
-            </div>
-            <ul class="navlink-wrapper">
-                <li id="save-button">Save</li>
-                <li id="load-button">Load</li>
-                <li id="settings-button">Settings</li>
-            </ul>
+    <div class="grid-container">
+        <!------------------------->
+        <!--title & introduction--->
+        <!------------------------->
+        <div class="title-wrapper">
+            <h1>Matyas Mihalyi</h1>
+            <p class="intro-text">
+                Welcome to my portfolio page. You can find here some of the projects I’ve been working on. 
+                I’ve started to study web development in November 2020.
+            </p>
         </div>
-<!------------------->
-<!-- clock section -->
-<!------------------->
-        <div class="clock-wrapper">
-            <div class="timer-wrapper">
-                <div class="timer">00:00</div>
+        <!------------------------->
+        <!-----portfolio items----->
+        <!------------------------->
+        <div class="portfolio-item-wrapper">
+
+            <!-- tribute page -->
+            <div class="portfolio-item">
+                <h2>Tribute page</h2>
+                <a href="" class="frame-wrapper">
+                    <iframe src="https://matyasmihalyi.github.io/" frameborder="0" scrolling="no"></iframe>
+                </a>
+                <p class="item-text">
+                    The first project of the freeCodeCamp responsive design course. I’ve learned a lot about using scroll effects with vanilla JavaScript. 
+                </p>
             </div>
-            <div class="interval-name"></div>
-            <div class="button-wrapper">
-                <button id="start" disabled>start</button>
-                <button id="pause" disabled>pause</button>
-                <button id="stop" disabled>stop</button>
+
+            <!-- product landing page -->
+            <div class="portfolio-item">
+                <h2>Product landing page</h2>
+                <a href="" class="frame-wrapper">
+                    <iframe src="https://matyasmihalyi.github.io/" frameborder="0" scrolling="no"></iframe>
+                </a>
+                <p class="item-text">
+                    The third project of the freeCodeCamp responsive design course. A landing page for a fictional company that offers cats to rent. 
+                </p>
+            </div>
+
+            <!-- Interval timer -->
+            <div class="portfolio-item">
+                <h2>Interval timer</h2>
+                <a href="" class="frame-wrapper">
+                    <iframe src="https://matyasmihalyi.github.io/" frameborder="0" scrolling="no"></iframe>
+                </a>
+                <p class="item-text">
+                    I’ve tried a few timer apps for HIIT training, but I always found them hard to set up.<br> With this app I’d like to introduce a more user friendly approach, where users can reorganise intervals via drag & drop and add repeat to multiple intervals after they’ve been set. 
+                   <br><br> This is a work in progress project, currently optimised for mobile only. I’m still testing out some functionalities before finalising the UI. I usually update it on the weekends. 
+                </p>
+            </div>
+
+            <!-- Dice roller -->
+            <div class="portfolio-item">
+                <h2>Dice roller</h2>
+                <a href="" class="frame-wrapper">
+                    <iframe src="Interval Timer/index.html" frameborder="0" scrolling="no"></iframe>
+                </a>
+                <p class="item-text">
+                    My next project for 2021. <br>
+                    I used to play tabletop RPGs as a kid, and I remember it was hard to get all the different kinds of dices necessary for the games. Of course, now there are webshops and other dice roller apps, but making this app will be great for practicing. I plan to make this app with React. 
+                </p>
             </div>
         </div>
-<!-- form to set up intervals -->
-        <form id="set-intervals" action="">
-            <input class="set-interval-name" type="text" name="name" placeholder="Interval name"> <br>
-            <input class="set-interval-time" type="number" min="0" max="90" name="min" placeholder="min">
-            <input class="set-interval-time" type="number" min="0" max="1000" name="sec" placeholder="sec"> <br>          
-            <button id="set" type="submit">set</button>
-        </form>      
-<!-- intervals are rendered in this div -->
-        <div id="intervals"></div>   
+        <!------------------------->
+        <!----------footer--------->
+        <!------------------------->
+        <div class="footer-wrapper">
+            <h3>About me</h3>
+            <p class="footer-text">
+                Email: <br>
+                Github: <br>
+                <br>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, repellendus. Veritatis, numquam quia adipisci voluptatem modi, at blanditiis inventore possimus dolorum voluptate, provident molestias labore nostrum maiores sequi exercitationem facere!
+            </p>
+        </div>
     </div>
-
-
-<!-------------->
-<!-------------->
-<!--- modal ---->
-<!-------------->
-<!-------------->
-    <div class="modal">
-        <!-------------->
-        <!---- save ---->
-        <!-------------->
-        <form id="save-form">
-            <div>
-                <label for="save-interval-name">Name</label>
-                <input id="save-interval-name" type="text" name="nameOfInterval"required>
-            </div>
-            <button id="save-interval" type="submit">Save</button>
-            <button id="cancel-save" type="button">Cancel</button>
-        </form>
-        
-        <!-------------->
-        <!---- load ---->
-        <!-------------->
-        <form id="load-form">
-            <p>Choose interval to load</p>
-            <!-- saved intervals are rendered here -->
-            <div class="saved-interval-container"></div>
-            <!---->
-            <button id="load-interval" type="submit">Load</button>
-            <button id="cancel-load" type="button">Cancel</button>
-        </form>
-
-        <!-------------->
-        <!-- settings -->
-        <!-------------->
-        <form id="settings-form">
-            <!-- repeat -->
-            <div class="repeat-wrapper">
-                <label for="repeat">Repeat</label>
-                <input type="checkbox" id="repeat" name="repeat" value="repeat" checked>
-            </div>
-            <!-- sound effect -->
-            <div class="sound-effect-wrapper">
-                <label for="sound-effect">Sound effect</label>
-                <select name="sound-effect" id="sound-effect">
-                    <option value="glass_ping.wav">Glass</option>
-                    <option value="none" disabled>None</option>
-                </select>
-            </div>
-            <!-- colour -->
-            <div class="color-wrapper">
-                <label for="colour">Colour theme</label>
-                <select name="colour" id="colour">
-                    <option value="black">Black & White</option>
-                    <option value="red" disabled>Red</option>
-                </select>
-            </div>
-            <button id="apply-settings" type="submit" disabled>Apply</button>
-            <button id="cancel-settings" type="button">Cancel</button>
-        </form>
-    </div>
-<!-------------->
-<!-------------->
-<!--- modal ---->
-<!-----end------>
-<!-------------->
+    <script src="app.js"></script>
 </body>
-<script src="app.js"></script>
 </html>
