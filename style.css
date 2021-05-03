@@ -206,10 +206,10 @@ h3{
 /**************LARGE DESKTOPS***********/
 /***************************************/
 /***************************************/
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 1800px) {
     .grid-container{
-        padding: 0 120px;
-        gap: 28px;
+        padding: 0 160px;
+        gap: 32px;
     }
     .portfolio-item-wrapper{
         grid-column: 3/11;
