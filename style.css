@@ -185,9 +185,10 @@ h3{
     }
     .portfolio-item {
         margin: 64px 0;
+        flex: 50%;
     }
     .item-text {
-        max-width: 40ch;
+        max-width: 35ch;
     }
     /***************************************/
     /*****************FOOTER****************/
@@ -200,7 +201,6 @@ h3{
         left: 0;
     }
 }
-
 /***************************************/
 /***************************************/
 /**************LARGE DESKTOPS***********/
@@ -210,8 +210,10 @@ h3{
     .grid-container{
         padding: 0 160px;
         gap: 32px;
+        max-width: 1920px;
     }
     .portfolio-item-wrapper{
         grid-column: 3/11;
     }
+    
 }
