@@ -404,7 +404,7 @@ section {
     align-items: center;
     background-image: 
         linear-gradient(to top,#000 3%,transparent 50%, transparent 85%, #000),
-        url("jimi-end-3.png");
+        url("img/jimi-end-3.png");
     background-position: 25%;
     background-repeat: no-repeat;
     background-size: contain;
@@ -482,7 +482,7 @@ section {
     height: 25px;
     top: 3vh;
     right: 5vw;
-    z-index: 50;
+    z-index: 500;
 }
 .burger div {
     background-color: #cdcdcd;

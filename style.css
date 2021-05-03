@@ -45,7 +45,7 @@ h1 {
     clip-path: polygon(0 0, 100% 0, 100% 60%, 0% 100%);
     background-color: #eee;
     z-index: -1;
-    transform: translateY(98px);
+    transform: translateY(76px);
 }
 
 /***************************************/
@@ -125,7 +125,6 @@ h3{
 /***************************************/
 @media only screen and (min-width: 900px){
     .grid-container{
-        display: grid;
         padding: 0 32px;
         grid-template-columns: repeat(8, 1fr);
         gap: 20px;
@@ -140,7 +139,7 @@ h3{
         left: 0;
     }
     h1 {
-        font-size: 60px;
+        font-size: 58px;
     }
 
     .portfolio-item-wrapper{
@@ -156,5 +155,63 @@ h3{
     .footer-wrapper::before{
         width: 100%;
         left: 0;
+    }
+}
+/***************************************/
+/***************************************/
+/*************MEDIUM DESKTOPS***********/
+/***************************************/
+/***************************************/
+@media only screen and (min-width: 1200px) {
+    .grid-container{
+        padding: 0 80px;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+    }
+
+    .title-wrapper{
+        grid-column: 4/10;
+    }
+    /***************************************/
+    /************PORTFOLIO ITEMS************/
+    /***************************************/   
+    .portfolio-item-wrapper{
+        grid-column: 2/12;
+    }
+    .portfolio-item-wrapper {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .portfolio-item {
+        margin: 64px 0;
+    }
+    .item-text {
+        max-width: 40ch;
+    }
+    /***************************************/
+    /*****************FOOTER****************/
+    /***************************************/
+    .footer-wrapper {
+        grid-column: 4/10;
+    }
+    .footer-wrapper::before{
+        width: 100%;
+        left: 0;
+    }
+}
+
+/***************************************/
+/***************************************/
+/**************LARGE DESKTOPS***********/
+/***************************************/
+/***************************************/
+@media only screen and (min-width: 1400px) {
+    .grid-container{
+        padding: 0 120px;
+        gap: 28px;
+    }
+    .portfolio-item-wrapper{
+        grid-column: 2/12;
     }
 }
