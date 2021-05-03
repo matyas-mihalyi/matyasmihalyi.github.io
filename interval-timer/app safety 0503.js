@@ -511,7 +511,6 @@ const cancelLoadForm = document.getElementById("cancel-load");
 const savedIntervalContainer = document.querySelector(".saved-interval-container");
 let savedIntervalElements;
 let deleteSavedButtons;
-let intervalsToLoad = [];
 
 //Clicking load brings up the modal & save-form, closes nav
 loadModalButton.onclick = () => {
@@ -569,18 +568,10 @@ loadForm.onsubmit = (e) => {
     e.preventDefault();
     
     //the selected input is the property of the saved interval array so we store it in a variable
-    itemToLoad = e.target.saveditem.value;
-
-    intervalsToLoad = []; //this variable will store the new interval object, we have to clear it
+    intervalToLoad = e.target.saveditem.value;
+    //assigning the selected saved item to the intervals array
+    intervals = savedIntervals[intervalToLoad];
     
-    //we get the saved interval and for each of its items we create object with CreateTimer constructor. this is necessary for the timers to have prototype functions
-    for(let i = 0; i < savedIntervals[itemToLoad].length; i++) {
-        intervalsToLoad.push(new CreateTimer (`${savedIntervals[itemToLoad][i]["name"]}`,`${savedIntervals[itemToLoad][i]["timeSet"]}`))
-    }
-    
-    //intervals are loaded into main variable    
-    intervals = intervalsToLoad;
-
     //refresh displayed intervals
     renderIntervals();
     
