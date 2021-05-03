@@ -212,6 +212,6 @@ h3{
         gap: 28px;
     }
     .portfolio-item-wrapper{
-        grid-column: 2/12;
+        grid-column: 3/11;
     }
 }
