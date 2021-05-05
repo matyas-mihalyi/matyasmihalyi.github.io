@@ -107,10 +107,12 @@ body {position: relative;}
     padding-top: 1em;
     padding-bottom: 2em;
     z-index: 50;
+    opacity: 0;
     transition: 0.3s ease-out;
 }
 .nav-active {
     transform: translateX(-2%) !important;
+    opacity: 1;
 }
 
 #header #nav-bar .nav-link {
@@ -370,7 +372,7 @@ body {position: relative;}
   }
   .video-modall iframe {
     width: 0;
-    height: 0; /* width*9/16 */
+    height: 0; 
     margin-left: auto;
     margin-right: auto;
     opacity: 0;
@@ -400,6 +402,7 @@ body {position: relative;}
     height: 5px;
     transition: 0.2s;
     transform-origin: 0%;
+    border-radius: 2px;
   }
   .close-btnn:hover *{
     background-color: #fff
@@ -478,6 +481,7 @@ body {position: relative;}
     width: auto;
     flex-direction: row;
     padding: 0 3em;
+    opacity: 1;
 }
 
 #nav-bar .nav-link{
