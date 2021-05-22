@@ -13,10 +13,10 @@ body {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 80px;
     gap: 0.5em;
     background-color: #000;
     padding: 1em;
+    padding-bottom: calc(71px + 3em);
     position: relative;
 }
 
@@ -29,15 +29,34 @@ body {
 /* BURGER */
 .nav-wrapper {
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #111;
+    background-color: #555;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 3rem;
+    z-index: 100;    
+}
+.navelement-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 20%; 
+}
+.navelement-wrapper p{
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    color: #fff;
+}
+.navelement-wrapper img{
+    height: 30px;
+    filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(214deg) brightness(106%) contrast(100%);
+}
+#add-split img {
+    height: 35px;
 }
 .nav-wrapper .burger{
-    position: absolute;
-    top: 1em;
-    right: 1em;
     display: flex;
     height: 30px;
     width: 30px;
@@ -71,15 +90,15 @@ body {
 /* NAV ELEMENTS */
 .nav-wrapper .navlink-wrapper{
     position: absolute;
-    top: 0;
+    bottom: 69px;
     right: 0;
-    padding: 3em 3em 2em 3em;
-    background-color: #222;
+    padding: 2em 3em 2em 3em;
+    background-color: #555;
     display: flex;
     flex-direction: column;
     align-items: center;
     list-style: none;
-    transform: translateX(100%);
+    transform: translateY(calc(100% + 71px));
     transition: 0.3s;
 }
 
@@ -100,7 +119,8 @@ body {
 
 .clock-wrapper {
     width: 100%;
-    grid-area: 1/1/5/5;
+    height: 50vh;
+    grid-column: 1/5;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(10, 1fr);    
@@ -155,26 +175,61 @@ body {
 /* INTERVAL INPUT FORM */
 
 #set-intervals {
-    grid-area: 5/1/6/5;
+    width: 100%;
+    padding: 0 1em;
+    background-color: #555;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    position: relative;
+    position: absolute;
+    bottom: 69px;
+    left: 0;
+    transform: translateY(calc(100% + 71px));
+    transition: transform 0.3s;
 }
+
+.set-intervals-active {
+    transform: translateY(0%) !important;
+}
+
 
 #set-intervals *{
     font-size: 1rem;
     margin: 0.25rem;
 }
+#set-intervals span {
+    width: 100%;
+    color: #fff;
+    padding: 0.5rem 0;
+    position: relative;
+}
+#set-intervals span .chevron{
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    height: 16px;
+    width: 16px;
+    border-right: 3px #fff solid;
+    border-bottom: 3px #fff solid;
+    transform: rotate(45deg);
+    transform-origin: 100%;
+}
+
 .set-interval-name {
     width: fit-content;
-    flex:1;
+    flex: 1;
+    height: 35px;
 }
 .set-interval-time {
     width: 15%;
+    height: 35px;
 }
 #set-intervals #set {
     width: 25%;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 16px 0;
 }
 
 
@@ -184,30 +239,43 @@ body {
 /*************/
 /*************/
 
-#intervals, #repeat-form {
+#intervals {
     padding: 1em 0;
     grid-column: 1/5;
+    grid-row-start: 7;
     font-size: 1rem;
     height: 0;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1em;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-end;
+    /* gap: 1em; */
+}
+#repeat-form {
+    padding: 1em 0;
+    font-size: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     align-items: center;
+    align-content: flex-start;
 }
 .interval {
     background-color: #cccccc;
     display: flex;
     width: 100%;
-    padding: 0.5em;
+    padding: 1rem;
     transform: translateY(0%);
     transition: 0.3s;
-    max-height: 60px;
     border-radius: 2px;
+    font-size: 1rem;
+    max-height: 51px;
+    margin: 0.5em 0;
 }
 
-.interval .name, .edited-interval-name {
+.interval .name {
     flex: 1;
 }
 
@@ -215,16 +283,69 @@ body {
     width: 20%;
 }
 .edited-interval-time {
-    width: 12%;
+    width: 2rem;
 }
 .interval button {
-    width: 12%;
+    width: 10%;
     height: 100%;
+    height: 19px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+}
+.interval button:disabled{
+    filter: invert(29%) sepia(0%) saturate(1741%) hue-rotate(181deg) brightness(90%) contrast(71%);
+}
+.edit {background-image: url(icons/pencil-fill.svg); display: none;}
+.delete {background-image: url(icons/delete-bin-line.svg); display: none;}
+.copy {background-image: url(icons/file-copy-line.svg); display: none;}
+#edit-ok, .edit-cancel {width: 8%;}
+
+.interval .options{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
 }
 
-.interval #edit-ok, .interval .edit-cancel {
-    width: 10%;
+.interval .options div{
+    width: 4px;
+    height: 4px;
+    background-color: #000;
+    border-radius: 50%;
 }
+
+.options-active {
+    background-image: url(icons/close-fill.svg);
+}
+.interval .options-active div {
+    background-color: transparent;
+}
+.interval-button-active {
+    display: block !important;
+}
+/* EDIT STATE */
+#edit-form {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#edit-form input {
+    padding: 0.5rem 0;
+}
+
+.edited-interval-name {
+    flex: 1;
+    /* margin-right: 16px; */
+}
+
+#edit-ok{background-image: url(icons/check-fill.svg);}
+.edit-cancel{background-image: url(icons/close-fill.svg);}
 
 
 /* DRAG STATES */
@@ -240,12 +361,98 @@ body {
     display: none;
 }
 
-/* REPEAT STATES */
+/**************/
+/**************/
+/* **REPEAT** */
+/**************/
+/**************/
 
-.repeat-selected{
-    transform: translateX(5px);
+.add-rep {
+    grid-row: 6;
+    grid-column: 4;
+    height: 35px;
+
+    font-weight: bold;
+    color: #fff;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
 }
 
+.repeat-settings {
+    /* height: 70px; */
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    width: 100%;
+    background-color: #555;
+    padding: 0.5em;
+    border-radius: 2px;
+}
+
+.repeat-settings *{
+    margin: 0 0.5em
+}
+.repeat-settings p {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 0.5em;
+}
+.repeat-settings input{
+    width: 70px;
+}
+.repeat-settings label{
+    color: #ccc;
+}
+.repeat-settings button{
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.repeat-settings button img{filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(214deg) brightness(106%) contrast(100%);}
+.repeat-settings button:disabled{border-color: rgb(84,84,84)}
+.repeat-settings button:disabled img{filter: invert(29%) sepia(0%) saturate(1741%) hue-rotate(181deg) brightness(90%) contrast(71%);}
+.repeat-settings button:active{background-color: rgba(255,255,255,0.5);}
+
+/* REPEATED INTERVALS */
+.repeated {
+    width: calc(100% - 32px);
+    background-color: #999;
+}
+.times-to-repeat {
+    max-width: 30px;
+    color: #fff;
+    width: 20px;
+    font-size: 1rem;
+    position: absolute;
+    left: 16px;
+}
+
+.topbar, .bottombar {
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    margin: 2px 0;
+}
+
+#repeat-form .delete{
+    width: 25px;
+    height: 25px;
+    background-position: center;
+    filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(214deg) brightness(106%) contrast(100%);
+    border: none;
+    background-color: transparent;
+} 
 /*************/
 /*************/
 /* **MODAL** */
@@ -365,7 +572,8 @@ body {
     .wrapper {
         grid-template-columns: repeat(8,1fr);
         gap: 20px;
-        padding: 32px 0;
+        padding: 20vh 0;
+        position: relative;
     }
     .clock-wrapper {
         grid-area: 1/3/5/7;
@@ -379,5 +587,9 @@ body {
 
     .modal form{
         width: 45vw;
+    }
+    .times-to-repeat{
+        grid-column: 3;
+        left: 0;
     }
 }
