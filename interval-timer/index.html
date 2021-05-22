@@ -13,17 +13,38 @@
 <!----------------->
 <!-- nav wrapper -->
 <!----------------->
-<div class="nav-wrapper">
-    <div class="burger">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
+        <div class="nav-wrapper">
+            <!-- repeat button -->
+            <div class="navelement-wrapper" id="add-rep">
+                <p>repeat</p>
+                <div class="nav-icon"><img src="icons/repeat-2-fill.svg" alt="repeat"></div>
+            </div>
+            <!-- add split -->
+            <div class="navelement-wrapper" id="add-split">
+                <p>add split</p>
+                <div class="nav-icon"><img src="icons/add-circle-line.svg" alt="add split"></div>
+            </div>
+            <!-- menu -->
+            <div class="navelement-wrapper">
+                <p>menu</p>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>            
             </div>
             <ul class="navlink-wrapper">
                 <li id="save-button">Save</li>
                 <li id="load-button">Load</li>
                 <li id="settings-button">Settings</li>
             </ul>
+        <!-- form to set up intervals -->
+            <form id="set-intervals" action="">
+                <input class="set-interval-name" type="text" name="name" placeholder="Interval name"> <br>
+                <input class="set-interval-time" type="number" min="0" max="90" name="min" placeholder="min">
+                <input class="set-interval-time" type="number" min="0" max="1000" name="sec" placeholder="sec"> <br>          
+                <button id="set" type="submit">set</button>
+            </form>
         </div>
 <!------------------->
 <!------------------->
@@ -40,16 +61,9 @@
                 <button id="pause" disabled><img src="icons/pause-fill.svg" alt="play"></button>
                 <button id="stop" disabled><img src="icons/stop-fill.svg" alt="play"></button>
             </div>
-        </div>
-<!-- form to set up intervals -->
-        <form id="set-intervals" action="">
-            <input class="set-interval-name" type="text" name="name" placeholder="Interval name"> <br>
-            <input class="set-interval-time" type="number" min="0" max="90" name="min" placeholder="min">
-            <input class="set-interval-time" type="number" min="0" max="1000" name="sec" placeholder="sec"> <br>          
-            <button id="set" type="submit">set</button>
-        </form>      
+        </div>   
 <!-- intervals are rendered in this div -->
-        <div id="intervals"></div>         
+        <div id="intervals"></div>          
 </div>
 
 

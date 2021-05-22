@@ -24,6 +24,7 @@ let editButton;
 let editOkButton;
 let editCancelButton;
 let copyButton;
+let optionsButtons;
 const intervalContainer = document.getElementById("intervals");
 let intervalElement;
 let dragItemArray; //array-t kell csinálni a draggelhető itemek nodeListjéből, hogy tudjuk őket index alapján azonosítani
@@ -35,15 +36,26 @@ let dragItemArray; //array-t kell csinálni a draggelhető itemek nodeListjébő
 function renderIntervals () {
     let formHTML = "";
     
-    for (let item of intervals)
-    formHTML += `
-    <div class="interval" draggable="true">
+    for (let item of intervals) {
+        let i = intervals.indexOf(item);
+        formHTML += `
+        ${intervals[i-1] === undefined && item.repeatGroup > 0 ? "<div class='topbar'></div>" : ""}
+        ${intervals[i-1] === undefined && item.repeatGroup > 0? `<div class="times-to-repeat">${item.repeatSet}x</div>` : ""} 
+        ${intervals[i-1] !== undefined && intervals[i-1].repeatGroup !== item.repeatGroup && item.repeatGroup > 0? "<div class='topbar'></div>" : ""}
+        ${item.repeatGroup > 0 && intervals[i-1] !== undefined && intervals[i-1].repeatGroup !== item.repeatGroup? `<div class="times-to-repeat">${item.repeatSet}x</div>` : ""} 
+        
+        <div class="interval ${item.repeatSet > 1 ? "repeated" : ""}" draggable="true">
         <div class="name">${item.name}</div>
         <div class="time">${formatTimeLeft(item.timeSet)}</div>
-        <button class="edit">edit</button>
-        <button class="delete">del</button>
-        <button class="copy">copy</button>
-    </div>`;
+        <button class="edit"></button>
+        <button class="delete"></button>
+        <button class="copy"></button>
+        <button class="options"><div></div><div></div><div></div></button>
+        </div>
+        ${intervals[i+1] === undefined && item.repeatGroup > 0 ? "<div class='bottombar'></div>" : ""}
+        ${intervals[i+1] !== undefined && intervals[i+1].repeatGroup !== item.repeatGroup && item.repeatGroup > 0? "<div class='bottombar'></div>" : ""}
+        `;
+    }
     intervalContainer.innerHTML = formHTML;
     if (intervals.length === 0) {
         clock.innerHTML = "00:00";
@@ -55,31 +67,35 @@ function renderIntervals () {
         clock.innerHTML = formatTimeLeft(intervals[0].timeLeft);
         intervalNameDisplay.innerHTML = `${intervals[0].name}`
     }
+    //EDIT INTERVAL BUTTON SHOWS/HIDES OPTIONS
+    
     //CLEAR INTERVAL FORM INPUTS
     [...intervalInputs].forEach((input) => input.value="")
     //drag function and variables
     intervalElement = document.querySelectorAll(".interval");
     dragItemArray =  Array.from(intervalElement);
     dragFunction();
- 
+    
     
     //check if there are intervals
     if (intervals.length !== 0) {
         //DELETE, EDIT & COPY BUTTONS
+        intervalElement = document.querySelectorAll(".interval");
         deleteButton = document.querySelectorAll(".delete");
         editButton = document.querySelectorAll(".edit");
         copyButton = document.querySelectorAll(".copy");
-        
+        optionsButtons = document.querySelectorAll(".options");
+
         for (let i = 0; i < intervals.length; i++) {
-            deleteButton[i].onclick = () => {    
-                intervals.splice(i, 1);
-                renderIntervals();
-            }
+            deleteButton[i].onclick = () => {intervals.splice(i, 1); renderIntervals();}
             editButton[i].onclick = () => editInterval(i);
             copyButton[i].onclick = () => copyInterval(i);
+            optionsButtons[i].addEventListener("click", () => {showIntervalOptions(i)})
         }
         //adjust container size
         resizeIntervalContainer();
+        //adjust repeat indicators for repeat groups
+        adjustRepeatIndicator();
     }
     //enable start & stop buttons if there are intervals
     startButton.disabled = false;
@@ -107,7 +123,6 @@ intervalForm.onsubmit = (e) => {
 
 
 
-
 //format time
 function formatTimeLeft(time) {
     let minutes = Math.floor(time / 60);
@@ -122,16 +137,37 @@ function formatTimeLeft(time) {
     return `${minutes}:${seconds}`;
 }
 
+//SHOW INTERVAL OPTIONS
+
+function showIntervalOptions(i) {
+    
+    deleteButton[i].classList.toggle("interval-button-active");
+    editButton[i].classList.toggle("interval-button-active");
+    copyButton[i].classList.toggle("interval-button-active");
+    optionsButtons[i].classList.toggle("options-active");
+    
+    
+    [...intervalElement].filter(element => element !== intervalElement[i])
+                        .map((element) => {
+                            return element.querySelectorAll("button");
+                        })
+                        .forEach(element => ([...element].forEach(child => {
+                            child.classList.remove("options-active")
+                            child.classList.remove("interval-button-active")})))
+    
+    
+}
+
 //EDIT FUNCTION
 function editInterval(i) {
     [...intervalElement].forEach((element) => element.setAttribute("draggable", false)); 
     intervalElement[i].innerHTML = `
     <form id="edit-form" action="">
-        <input type="text" name="name" class="edited-interval-name" value="${intervals[i].name}">
-        <input type="number" min="0" max="90" name="min" class="edited-interval-time" value="${Math.floor(intervals[i].timeSet/60)}"> : 
-        <input type="number" min="0" max="1000" name="sec" class="edited-interval-time" value="${intervals[i].timeSet % 60}"> 
-    <button type="submit" id="edit-ok">Ok</button>
-    <button class="edit-cancel">cancel</button>
+    <input type="text" name="name" class="edited-interval-name" value="${intervals[i].name}">
+    <input type="number" min="0" max="90" name="min" class="edited-interval-time" value="${Math.floor(intervals[i].timeSet/60)}"> : 
+    <input type="number" min="0" max="1000" name="sec" class="edited-interval-time" value="${intervals[i].timeSet % 60}"> 
+        <button type="submit" id="edit-ok"></button>
+        <button typpe="button" class="edit-cancel"></button>
     </form>`;
     editForm = document.getElementById("edit-form")
     editOkButton = document.getElementById("edit-ok");
@@ -157,7 +193,10 @@ function editInterval(i) {
 //COPY FUNCTION
 function copyInterval (i) {
     let intervalCopy =  new CreateTimer(intervals[i].name, intervals[i].timeSet);
-    
+    intervalCopy.repeatSet = intervals[i].repeatSet;
+    intervalCopy.repeat = intervalCopy.repeatSet;
+    intervalCopy.repeatGroup = intervals[i].repeatGroup;
+
     intervals.splice(i, 0, intervalCopy);
     
     renderIntervals();
@@ -165,9 +204,34 @@ function copyInterval (i) {
 
 //RESIZE #INTERVALS INTERVAL CONTAINER
 function resizeIntervalContainer () {
-    intervalContainer.style.height = `${(intervalElement[0].offsetHeight+16) * (intervalElement.length)}px`
+    // intervalElement = 
+    //if repeat form is open add extra height
+    if (intervalContainer.querySelector("form") !== null) {
+        intervalContainer.style.height = `${((intervalElement[0].offsetHeight+16) * (intervalElement.length + 1))}px`
+    } else {
+        intervalContainer.style.height = `${(intervalElement[0].offsetHeight+16) * (intervalElement.length)}px`
+    }
 }
 
+//ADJUST REPEAT INIDCATOR
+function adjustRepeatIndicator () {
+    let topbar = document.querySelectorAll(".topbar");
+    let bottombar = document.querySelectorAll(".bottombar");
+    let repeatIndicator = document.querySelectorAll(".times-to-repeat");
+
+    for (let i = 0; i < repeatIndicator.length; i++) {
+        topbarBounding = topbar[i].getBoundingClientRect();
+        bottombarBounding = bottombar[i].getBoundingClientRect();
+        let indicatorPositionTop = 
+            ((((bottombarBounding.bottom + window.scrollY) -
+            (topbarBounding.top + window.scrollY) + 
+            (bottombar[i].offsetHeight / 2)) -
+            repeatIndicator[i].offsetHeight) / 2) +
+            (topbarBounding.top + window.scrollY);
+
+        repeatIndicator[i].style.top = `${indicatorPositionTop}px`
+    }
+}
 ///////////////////////////////////
 //////////////BUTTONS//////////////
 ///////////////////////////////////
@@ -189,14 +253,11 @@ startButton.onclick = () => {
 }
 
 //PAUSE BUTTON
-pauseButton.onclick = () => {
+pauseButton.onclick = () => { 
     //find running interval and pause it with clearInterval
-    for (let i = 0; i < intervals.length; i++) {
-        if (intervals[i].isRunning) {
-            intervals[i].isRunning === false;
-            intervals[i].pause_timer();    
-        }
-    }
+    // intervals.forEach(interval => console.table(`${interval.name} ${interval.isRunning}`))
+    intervals.filter(interval => interval.isRunning)
+    .forEach(interval => {interval.pause_timer(); interval.isRunning = false; console.log(`${interval.name} paused`)});
     //enable start button
     startButton.disabled = false;
     pauseButton.disabled = true;
@@ -231,27 +292,105 @@ CreateTimer.prototype = {
 //set the countdown starter method on each interval object
 CreateTimer.prototype.start_timer = function startTimer(){
     this.timerInterval = setInterval(() => {
+        this.isExpired = false;
         this.isRunning = true;
         this.timePassed = this.timePassed += 1;
-        this.timeLeft = this.timeSet-this.timePassed;
+        this.timeLeft = this.timeSet - this.timePassed;
         //render remaining time & interval name
         clock.innerHTML = formatTimeLeft(this.timeLeft);
         intervalNameDisplay.innerHTML = this.name;
-        //stop sound
-        // sound1.pause();
-        // sound1.currentTime = 0;
-        //if countdown reaches zero start next interval or finish if it was the last one
-        //REPEAT UNCHECKED
-        if (this.timeLeft === 0 && !repeatCheckBox.checked) {
-            //set current interval to base 
-            clearInterval(this.timerInterval);
-            this.timePassed = 0;
-            this.isRunning = false;
-            this.isExpired = true;
+        
 
-            //to start next interval, get current one's index
-            let i = intervals.indexOf(this);             
+    //TEMPORARY FIX for pausing at 0
+    if (intervals.some(interval => interval.isRunning === true)) {
+        startButton.disabled = true;
+        pauseButton.disabled = false;
+        setButton.disabled = true;
+        [...deleteButton].forEach((button)=>button.disabled=true);
+        [...editButton].forEach((button)=>button.disabled=true);
+        [...copyButton].forEach((button)=>button.disabled=true);
+    }
+
+        //to start next interval, get current one's index
+        let i = intervals.indexOf(this);  
+        
+        //REPEAT 
+        //if countdown reaches zero start next interval /check for repeat & repeat if needed/ finish if it was the last one
+        if (
+            this.isRunning === true && //if paused at 00:00 it will start next so check isRunnig flag
+            this.repeat > 0 && //if it still needs to be repeated
+            this.timeLeft === 0) {  //if the split's time is up
+
+                //current one needs to be repeated one less time
+                this.repeat = this.repeat - 1;
+                // console.log(this.repeat)
+                
+                //set current interval to base 
+                this.setToBase();
+                // console.log("repeat condition");
+
+
+            //if it's the last one to be repeated
+            if (intervals.indexOf(this) !== intervals.length-1 && //it's not the last among all intervals 
+                intervals[i+1].repeatGroup !== this.repeatGroup  //it's the last to be repeated 
+                ) {
+                    if (this.repeat !== 0) { //if it will be repeated more
+                        
+                        // console.log("last to repeat && will be repeated again");
+                        //look for a split to be repeated  that has a repeat value and start it
+                        intervals.find(item => item.repeatGroup === this.repeatGroup).start_timer();
+                        
+                    } else { //if this was the last time it was repeated
+                        intervals[i + 1].start_timer();
+                        // console.log("last to repeat && won't be repeated again");
+                    }                                
+            
+            //it's the last of all intervals
+            } else if (intervals.indexOf(this) === intervals.length-1 
+                ) {
+                    if (this.repeat !== 0) {
+                        intervals.find(item => item.repeatGroup === this.repeatGroup).start_timer();
+                        // console.log("last of all intervals & to be repeated");
+                    } else {
+                           //if infinite repeat is checked 
+                            if (repeatCheckBox.checked) {
+                                intervals.forEach((interval) => {interval.isExpired = false; interval.repeat = interval.repeatSet;});
+                                intervals[0].start_timer();
+                            //if there's no infinite repeat
+                            } else {  
+                                intervals.forEach((interval) => {interval.isExpired = false; interval.repeat = interval.repeatSet;});
+                            }    
+                    }
+
+            } else { //if it's not the last to be repeated
+                // console.log("not last to repeat");
+                intervals[i + 1].start_timer();  
+            }
+
+   
+        //INFINITE REPEAT CHECKED
+        } else if (this.timeLeft === 0 && repeatCheckBox.checked && this.isRunning === true) {
+            //set current interval to base 
+            this.setToBase();
              
+            //play alarm sound
+            sound1.play();
+
+            //if it was the last
+            if (intervals.length === i+1) {
+                intervals.forEach((item)=> item.stop_timer());
+                intervals[0].start_timer();
+            //if there are still intervals left, start the next one
+            } else if (intervals[i + 1].isExpired === false) {  
+                intervals[i + 1].start_timer();
+            }
+        }     
+
+        //INFINITE REPEAT UNCHECKED
+        else if (this.timeLeft === 0 && !repeatCheckBox.checked && this.isRunning === true) {
+            //set current interval to base 
+            this.setToBase();
+                       
             //play alarm sound
             sound1.play();
 
@@ -262,33 +401,25 @@ CreateTimer.prototype.start_timer = function startTimer(){
             //if there are still intervals left, start the next one
             } else if (intervals[i + 1].isExpired === false) {  
                 intervals[i + 1].start_timer();
-                
-            } 
-        //REPEAT CHECKED
-        } else if (this.timeLeft === 0 && repeatCheckBox.checked) {
-            //set current interval to base 
-            clearInterval(this.timerInterval);
-            this.timePassed = 0;
-            this.isRunning = false;
-            this.isExpired = true;
-            //to start next interval, get current one's index
-            let i = intervals.indexOf(this);
-             
-            //play alarm sound
-            sound1.play();
-
-            //if it was the last, set isExpired false to all, and start first timer
-            if (intervals.length === i+1) {
-                intervals.forEach((interval) => interval.isExpired = false);
-                intervals[0].start_timer();
-             //if there are still intervals left, start the next one
-            } else if (intervals[i + 1].isExpired === false) {  
-                intervals[i + 1].start_timer();
-            }  
+            }
         }
     }, 1000);
     
 }
+//helper functions for .start_timer();
+
+//need one to start next split
+
+
+//set interval to base
+CreateTimer.prototype.setToBase = function setIntervaltoBase () {
+    clearInterval(this.timerInterval);
+    // this.timerInterval = null;
+    this.timePassed = 0;
+    this.isRunning = false;
+    this.isExpired = true;
+}
+
 
 //set the pause function for each interval object
 CreateTimer.prototype.pause_timer = function pauseTimer() {
@@ -298,10 +429,12 @@ CreateTimer.prototype.pause_timer = function pauseTimer() {
 
 CreateTimer.prototype.stop_timer = function stopTimer() {
     clearInterval(this.timerInterval);
+    // this.timerInterval = null;
     this.timePassed = 0;
     this.timeLeft = this.timeSet;
     this.isRunning = false;
     this.isExpired = false;
+    this.repeat = this.repeatSet;
 }
 
 //the constructor function. takes time as input and sets it to timeSet key
@@ -311,7 +444,11 @@ function CreateTimer(name, num) {
     this.timePassed = 0,
     this.timeLeft = this.timeSet,
     this.isRunning = false,
-    this.isExpired = false
+    this.isExpired = false,
+    //for repeat
+    this.repeatSet = 0,
+    this.repeat = this.repeatSet
+    this.repeatGroup = 0;
 }
 
 //ARRAY STORING THE INTERVALS
@@ -434,6 +571,8 @@ const navlinks = document.querySelector(".navlink-wrapper");
 
 burger.onclick = () => {
     burger.classList.toggle("burger-active"); navlinks.classList.toggle("nav-active");
+    intervalForm.classList.remove("set-intervals-active");
+    renderIntervals();
 }
 
 //////////////////////////////////
@@ -575,7 +714,11 @@ loadForm.onsubmit = (e) => {
     
     //we get the saved interval and for each of its items we create object with CreateTimer constructor. this is necessary for the timers to have prototype functions
     for(let i = 0; i < savedIntervals[itemToLoad].length; i++) {
-        intervalsToLoad.push(new CreateTimer (`${savedIntervals[itemToLoad][i]["name"]}`,`${savedIntervals[itemToLoad][i]["timeSet"]}`))
+        intervalsToLoad.push(new CreateTimer (`${savedIntervals[itemToLoad][i]["name"]}`,`${savedIntervals[itemToLoad][i]["timeSet"]}`));
+        //add repeatSet & repeatGroup
+        intervalsToLoad[i]["repeatSet"] = savedIntervals[itemToLoad][i]["repeatSet"]; 
+        intervalsToLoad[i]["repeat"] = intervalsToLoad[i]["repeatSet"]; 
+        intervalsToLoad[i]["repeatGroup"] = savedIntervals[itemToLoad][i]["repeatGroup"];
     }
     
     //intervals are loaded into main variable    
@@ -610,46 +753,141 @@ cancelSettingsForm.onclick = () => {modal.classList.remove("modal-open"); settin
 //////////REPEAT SECTIONS/////////
 //////////////////////////////////
 //////////////////////////////////
-
+const addRepeatButton = document.querySelector("#add-rep")
 let repeatForm;
 let cancelRepeatButton;
+let repeatFormCheckboxes;
+let checkedBoxes = [];
+//repeat section flag base value. always add 1 when form is submitted
+let repeatGroupFlag = 0;
+
+
+addRepeatButton.onclick = () => {if (intervals.length >0) {renderIntervalsToRepeat();}}
 
 function renderIntervalsToRepeat() {
     let formHTML = "";
     
-    for (let item of intervals)
+    for (let item of intervals) {
+    let i = intervals.indexOf(item);
     formHTML += `
-    <div class="interval" draggable="false">
-        <div class="name">${item.name}</div>
-        <div class="time">${formatTimeLeft(item.timeSet)}</div>
-        <input type="checkbox" value="${intervals.indexOf(item)}"> 
-    </div>`;
+        ${intervals[i-1] === undefined && item.repeatGroup > 0 ? "<div class='topbar'></div>" : ""}
+        ${intervals[i-1] === undefined && item.repeatGroup > 0? `<div class="times-to-repeat">${item.repeatSet}x<button class="delete interval-button-active" type="button" value="${item.repeatGroup}"></button></div>` : ""} 
+        ${intervals[i-1] !== undefined && intervals[i-1].repeatGroup !== item.repeatGroup && item.repeatGroup > 0? "<div class='topbar'></div>" : ""}
+        ${item.repeatGroup > 0 && intervals[i-1] !== undefined && intervals[i-1].repeatGroup !== item.repeatGroup? `<div class="times-to-repeat">${item.repeatSet}x<button class="delete interval-button-active" type="button" value="${item.repeatGroup}"></button></div>` : ""} 
+            <div class="interval ${item.repeatSet > 1 ? "repeated" : ""}" draggable="false">
+                <div class="name">${item.name}</div>
+                <div class="time">${formatTimeLeft(item.timeSet)}</div>
+                <input type="checkbox" name ="repbox" value="${intervals.indexOf(item)}" ${item.repeatSet > 1 ? "checked disabled" : ""}>
+                </div>
+                ${intervals[i+1] === undefined && item.repeatGroup > 0 ? "<div class='bottombar'></div>" : ""}
+                ${intervals[i+1] !== undefined && intervals[i+1].repeatGroup !== item.repeatGroup && item.repeatGroup > 0? "<div class='bottombar'></div>" : ""}
+                `;
+            }
     //embed elements into a form
-    formHTML = `<form id="repeat-form">` + formHTML + `
-            <label for="times-to-repeat">Times to repeat</label>
-                <input type="number" id="times-to-repeat" name="timesToRepeat" min="1" required>
-                <button type="submit">okidoki</button>
-                <button type="button" id="cancel-repeat-form">cancelláris</button>
-            </form>
-    `
-
-    //még ki kell találni milyen value alapján fogjuk visszahívni a form által beküldött intervalokat. egyelőre 
-    //az INDEX van megadva
+    formHTML = `<form id="repeat-form">
+                    <div class="repeat-settings">
+                        <p>Select splits to repeat</p>
+                        <label for="times-to-repeat">times to repeat</label>
+                        <input type="number" id="times-to-repeat" name="timesToRepeat" min="2" required>
+                        <button type="submit" id="submit-repeat-form"><img src="icons/check-fill.svg" alt="ok"></button>
+                        <button type="button" id="cancel-repeat-form"><img src="icons/close-fill.svg" alt="cancel"></button>
+                    </div>` 
+                    + formHTML + `    
+                </form>`;          
     intervalContainer.innerHTML = formHTML;
-
+                
     repeatForm = document.getElementById("repeat-form");
+    deleteButton = document.querySelectorAll(".delete");
     cancelRepeatButton = document.getElementById("cancel-repeat-form");
     intervalElement = document.querySelectorAll(".interval"); //might have to use antoher one, this used in drag function
+    repeatFormCheckboxes = [...intervalElement]
+                            .filter(element => !element.classList.contains("repeated"))
+                            .map(element => element.querySelector("input"));
+    
+    //delete repeatGroup function
+    for (let i = 0; i < deleteButton.length; i++) {
+        deleteButton.length !== null ?
+        deleteButton[i].onclick = (e) => {deleteRepeatGroup(e); renderIntervalsToRepeat()} : "";
+    }
+    //resize container bc buttons & adjust repeat indicator
+    resizeIntervalContainer();
+    adjustRepeatIndicator();
 
+    //add eventlistener to checkboxes and run selectRepeat function whihch automatically checks boxes between two distant boxes
+    [...repeatFormCheckboxes].forEach(element => {
+        element.addEventListener("change", (e) => {selectRepeat(e)});
+    });
+
+    //submitting repeat form
+    repeatForm.onsubmit = (e) => {
+        e.preventDefault();
+        checkedBoxes = repeatFormCheckboxes.filter(element => element.checked);
+        let repeatStartIndex = parseInt(checkedBoxes[0].value);
+        let repeatEndIndex = parseInt(checkedBoxes[checkedBoxes.length-1].value) + 1;
+       
+        //find interval with highest repeatGroup and add 1. this is needed bc when intervals are loaded repeatGroupFlag would be 0
+        repeatGroupFlag = Math.max.apply(null, (intervals.map((interval) => {return interval.repeatGroup})));
+        repeatGroupFlag += 1;
+
+        //modify repeat values of selected intervals
+        for (let i = repeatStartIndex; i < repeatEndIndex; i++) {
+            intervals[i]["repeatSet"] = parseInt(e.target.timesToRepeat.value);
+            intervals[i]["repeat"] = intervals[i]["repeatSet"];
+            //add repeat flag 
+            intervals[i]["repeatGroup"] = repeatGroupFlag;
+        } 
+
+        renderIntervals();
+    }
+    //cancelling repeatform
+    cancelRepeatButton.onclick = () => {renderIntervals();}
+}
+
+//////////////////////////////////////
+//HELPER FUNCTIONS FOR REPEAT SET UP//
+//////////////////////////////////////
+
+//this function selects the splits that need to be repeated. when two boxes are checked, all others between the two will be checked automatically
+function selectRepeat (e) {
+
+    //if the first element is unchecked, uncheck all
+     if (checkedBoxes.length >= 2 && e.target.value === checkedBoxes[0].value) {
+        checkedBoxes.forEach(element => {element.checked = false;});
+        checkedBoxes = repeatFormCheckboxes.filter(element => element.checked);
+    }
+
+    //get all checked boxes here
+    checkedBoxes = repeatFormCheckboxes.filter(element => element.checked); 
+        
+    //if next check is not at the end uncheck all after it
+    if (checkedBoxes.length >= 2 && checkedBoxes.indexOf(e.target) < checkedBoxes.length-1 && e.target.value !== checkedBoxes[0].value) {
+        let boxesAfter = repeatFormCheckboxes.filter(element => repeatFormCheckboxes.indexOf(e.target) < repeatFormCheckboxes.indexOf(element));
+        boxesAfter.forEach(element => {element.checked = false;});
+        checkedBoxes = repeatFormCheckboxes.filter(element => element.checked);
+        
+        //else get the checkboxes between the first and the highest indexed checkbox and check them
+    } else if (checkedBoxes.length >= 2 && checkedBoxes.indexOf(e.target) === checkedBoxes.length-1) {
+        let boxesBetween = [...repeatFormCheckboxes].splice(`${checkedBoxes[0].value}`, `${checkedBoxes[checkedBoxes.length-1].value}`);
+        boxesBetween.forEach(element => element.checked = true);
+        checkedBoxes = repeatFormCheckboxes.filter(element => element.checked);
+    }
+}
+
+//deleting a repeatGroup
+function deleteRepeatGroup (e) {
+    e.preventDefault();
+    let toDelete = intervals
+                    .filter(item => item.repeatGroup === parseInt(e.target.value));
+    toDelete.forEach(item => {
+        item.repeatGroup = 0;
+        item.repeatSet = 0;
+        item.repeat = item.repeatSet;
+    })
 }
 
 
-//on checking second element select all between them
 
-
-
-
-
+//when an element is checked, apply a style to it?
 
 
 
@@ -668,6 +906,9 @@ function renderIntervalsToRepeat() {
 
 //bea able to overwrite previous saved names
 
+//
+
+
 ////////////////////////////////////////
 
 //choose sound
@@ -675,3 +916,11 @@ function renderIntervalsToRepeat() {
 //color themes
 
 //edit sound of interval
+
+const addSplitButton = document.getElementById("add-split");
+addSplitButton.onclick = () => {
+    intervalForm.classList.toggle("set-intervals-active");
+    navlinks.classList.remove("nav-active");
+    burger.classList.remove("burger-active");
+    renderIntervals();
+}
