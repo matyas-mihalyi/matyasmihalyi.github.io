@@ -1,13 +1,11 @@
 * {box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', Helvetica, cursive;}
-body {
-    display: flex;
-    justify-content: center;    
-}
+
 .grid-container{
     display: grid;
     padding: 0 20px;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
+    position: relative;
 }
 
 /***************************************/
@@ -27,7 +25,7 @@ h1 {
     text-align: center;
     font-size: 44px;
     text-align: center;
-    letter-spacing: -4px;
+    letter-spacing: -2px;
     font-weight: 900;
     line-height: 44px;
 }
@@ -146,10 +144,21 @@ h3{
     margin: 16px 0;
 }
 
-/***************************************/
+/* SWITCH */
+
+.switch {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.switch > span {
+    font-size: 1.5rem;
+}
+
 /***************************************/
 /*************SMALL DESKTOPS************/
-/***************************************/
 /***************************************/
 @media only screen and (min-width: 900px){
     .grid-container{
@@ -174,9 +183,7 @@ h3{
         grid-column: 3/7;
     }
     
-    /***************************************/
-    /*****************FOOTER****************/
-    /***************************************/
+    /*FOOTER*/
     .footer-wrapper {
         grid-column: 2/8;
     }
@@ -184,11 +191,18 @@ h3{
         width: 100%;
         left: 0;
     }
+    /* SWITCH */
+    .switch {
+        top: 1.5em;
+        right: 3em;
+    }
+    
+    .switch > span {
+        font-size: 1.5rem;
+    }
 }
 /***************************************/
-/***************************************/
 /*************MEDIUM DESKTOPS***********/
-/***************************************/
 /***************************************/
 @media only screen and (min-width: 1200px) {
     .grid-container{
@@ -200,9 +214,7 @@ h3{
     .title-wrapper{
         grid-column: 4/10;
     }
-    /***************************************/
     /************PORTFOLIO ITEMS************/
-    /***************************************/   
     .portfolio-item-wrapper{
         grid-column: 2/12;
     }
@@ -230,9 +242,7 @@ h3{
     }
 }
 /***************************************/
-/***************************************/
 /**************LARGE DESKTOPS***********/
-/***************************************/
 /***************************************/
 @media only screen and (min-width: 1800px) {
     .grid-container{
@@ -245,3 +255,17 @@ h3{
     }
     
 }
+
+
+/* @media(prefers-color-scheme: dark) { */
+    body[dark-mode = true] {
+        background-color: #111;
+        color: #f0f0f0;
+    }
+    body[dark-mode = true] .title-wrapper::before, body[dark-mode = true] .footer-wrapper::before {
+        background-color: #222;
+    }
+    body[dark-mode = true] a {
+        color: rgb(166, 166, 255)
+    }
+/* } */
